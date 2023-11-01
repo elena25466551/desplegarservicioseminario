@@ -1,0 +1,28 @@
+version: '3'
+
+services:
+  mysql:
+    image: mysql-img
+    ports:
+      - "3306:3306"
+    # Creo un volumen para no perder el los datos de la BD al eliminar el contenedor.
+    volumes:
+      - ./mysql-datos:/var/lib/mysql
+
+  apache:
+    image: apache-img
+    ports:
+      - "8080:81"
+    deploy:
+      replicas: 3
+    depends_on:
+      - mysql
+
+  nodejs:
+    image: node-img
+    ports:
+      - "8090:3000"
+    deploy:
+      replicas: 3
+    depends_on:
+      - mysql
